@@ -142,48 +142,72 @@
         document.querySelector('input#filter').focus();
     }
 	
-
-    let imageDescriptions = {};
-    async function fetchDescriptions() {
-        try {
-            let response = await fetch('descriptions.json');
-			
-            if (response.ok) {
-                imageDescriptions = await response.json();
-            }
-        } catch (error) {
-        }
-    }
-    function getDescription(filename) {
-        return imageDescriptions[filename] || 'Image'; // Default description if not found
-    }
-
-	async function showImage() {
-		await fetchDescriptions();
-		 
+    /**
+     * Show thumbnails for image if one exists
+     */
+	function showThumbnail() {
 		document.querySelectorAll('a').forEach(function(link) {
 			if (!link.getAttribute("href").match("/$")) {
 				let href = link.getAttribute('href');
-				if (href && href.match(/\.(JPEG|JPG|jpeg|jpg|gif|png)$/) !== null) {
+				if (href && href.match(/\.(JPEG|jpeg|JPG|jpg|GIF|gif|PNG|png)$/) !== null) {
 					if (!link.querySelector('img')) { // Check if an image already exists
 						let thumbnailHref = href.replace(/([^\/]+)$/, '.thumbnails/$1');
 						let img = document.createElement('img');
 						img.src = thumbnailHref;
 						img.alt = link.textContent || 'Image';
 						link.textContent = '';
-						let description = getDescription(href); // Get the description
 						link.appendChild(img);
+					}
+				}
+			}
+		});
+	}
+
+    /**
+     * Load file descriptions from descriptions.json
+     */
+    let fileDescriptions = {};
+    async function fetchDescriptions() {
+        try {
+            let response = await fetch('descriptions.json');
+			
+            if (response.ok) {
+                fileDescriptions = await response.json();
+            }
+        } catch (error) {
+        }
+    }
+	
+    /**
+     * get file description from fileDescriptions
+     */
+    function getDescription(filename) {
+        return fileDescriptions[filename] || null; // Default description if not found
+    }
+	
+	
+    /**
+     * set file descriptions
+     */
+	async function setDescriptions() {
+		await fetchDescriptions();
+		 
+		document.querySelectorAll('a').forEach(function(link) {
+			if (!link.getAttribute("href").match("/$")) {
+				let href = link.getAttribute('href');
 						
-						// Find the corresponding indexcoldesc <td> element and add the description
-						let parentRow = link.closest('tr');
-						if (parentRow) {
-							let descTd = parentRow.querySelector('td.indexcoldesc');
-							if (descTd) {
-								descTd.textContent = description;
-							}
+				// Find the corresponding indexcoldesc <td> element and add the description
+				let parentRow = link.closest('tr');
+				if (parentRow) {
+					let descTd = parentRow.querySelector('td.indexcoldesc');
+					if (descTd) {
+						let description = getDescription(href);
+						if(description !== null) {
+							descTd.textContent = description; // Set the description
 						}
 					}
 				}
+				
 			}
 		});
 	}
@@ -194,7 +218,8 @@
     documentReady(function(){
         setTitle();
         setSortIcon();
-		showImage();
+		showThumbnail();
+		setDescriptions();
         document.querySelector('input#filter').addEventListener('input', onSearchInputChange);
         document.querySelector('.close-search').addEventListener('click', cleanSearch);
     });
