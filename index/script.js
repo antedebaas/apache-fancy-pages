@@ -141,6 +141,52 @@
         document.querySelector('input#filter').value = '';
         document.querySelector('input#filter').focus();
     }
+	
+
+    let imageDescriptions = {};
+    async function fetchDescriptions() {
+        try {
+            let response = await fetch('descriptions.json');
+			
+            if (response.ok) {
+                imageDescriptions = await response.json();
+            }
+        } catch (error) {
+        }
+    }
+    function getDescription(filename) {
+        return imageDescriptions[filename] || 'Image'; // Default description if not found
+    }
+
+	async function showImage() {
+		await fetchDescriptions();
+		 
+		document.querySelectorAll('a').forEach(function(link) {
+			if (!link.getAttribute("href").match("/$")) {
+				let href = link.getAttribute('href');
+				if (href && href.match(/\.(JPEG|JPG|jpeg|jpg|gif|png)$/) !== null) {
+					if (!link.querySelector('img')) { // Check if an image already exists
+						let thumbnailHref = href.replace(/([^\/]+)$/, '.thumbnails/$1');
+						let img = document.createElement('img');
+						img.src = thumbnailHref;
+						img.alt = link.textContent || 'Image';
+						link.textContent = '';
+						let description = getDescription(href); // Get the description
+						link.appendChild(img);
+						
+						// Find the corresponding indexcoldesc <td> element and add the description
+						let parentRow = link.closest('tr');
+						if (parentRow) {
+							let descTd = parentRow.querySelector('td.indexcoldesc');
+							if (descTd) {
+								descTd.textContent = description;
+							}
+						}
+					}
+				}
+			}
+		});
+	}
 
     /**
      * Start
@@ -148,6 +194,7 @@
     documentReady(function(){
         setTitle();
         setSortIcon();
+		showImage();
         document.querySelector('input#filter').addEventListener('input', onSearchInputChange);
         document.querySelector('.close-search').addEventListener('click', cleanSearch);
     });
