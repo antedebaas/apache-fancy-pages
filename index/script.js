@@ -164,17 +164,35 @@
 	}
 
     /**
-     * Load file descriptions from descriptions.json
+     * Load directory licence from .licence.json
      */
-    let fileDescriptions = {};
+    async function fetchLicence() {
+        try {
+            let response = await fetch('.licence.txt');
+			
+            if (response.ok) {
+                licence = await response.text();
+				const licenceContainer = document.querySelector('small#licence');
+				if (licenceContainer) licenceContainer.innerHTML = licence;
+            }
+        } catch (error) {
+			
+        }
+    }
+
+    /**
+     * Load file descriptions from .descriptions.json
+     */
+	let fileDescriptions = {};
     async function fetchDescriptions() {
         try {
-            let response = await fetch('descriptions.json');
+            let response = await fetch('.descriptions.json');
 			
             if (response.ok) {
                 fileDescriptions = await response.json();
             }
         } catch (error) {
+			
         }
     }
 	
@@ -184,7 +202,6 @@
     function getDescription(filename) {
         return fileDescriptions[filename] || null; // Default description if not found
     }
-	
 	
     /**
      * set file descriptions
@@ -218,8 +235,9 @@
     documentReady(function(){
         setTitle();
         setSortIcon();
-		showThumbnail();
+		fetchLicence();
 		setDescriptions();
+		showThumbnail();
         document.querySelector('input#filter').addEventListener('input', onSearchInputChange);
         document.querySelector('.close-search').addEventListener('click', cleanSearch);
     });
