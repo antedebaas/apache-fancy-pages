@@ -153,8 +153,10 @@
 					if (!link.querySelector('img')) { // Check if an image already exists
 						let thumbnailHref = href.replace(/([^\/]+)$/, '.thumbnails/$1');
 						let img = document.createElement('img');
+                        let textNode = document.createTextNode(' ' + description);
+                        link.appendChild(textNode);
 						img.src = thumbnailHref;
-						img.alt = link.textContent || 'Image';
+						img.alt = link.textContent;
 						link.textContent = '';
 						link.appendChild(img);
 					}
