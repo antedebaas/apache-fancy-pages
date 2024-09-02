@@ -151,14 +151,19 @@
 				let href = link.getAttribute('href');
 				if (href && href.match(/\.(JPEG|jpeg|JPG|jpg|GIF|gif|PNG|png)$/) !== null) {
 					if (!link.querySelector('img')) { // Check if an image already exists
-						let thumbnailHref = href.replace(/([^\/]+)$/, '.thumbnails/$1');
-						let img = document.createElement('img');
-                        let textNode = document.createTextNode(' ' + description);
+                        let thumbnailHref = href.replace(/([^\/]+)$/, '.thumbnails/$1');
+                        let img = document.createElement('img');
+                        let filename = link.textContent;
+                        img.src = thumbnailHref;
+                        img.alt = filename;
+                        link.textContent = '';
+    
+                        // Create a text node for the filename and insert it before the image
+                        let textNode = document.createTextNode(filename);
                         link.appendChild(textNode);
-						img.src = thumbnailHref;
-						img.alt = link.textContent;
-						link.textContent = '';
-						link.appendChild(img);
+                        let br = document.createElement('br');
+                        link.appendChild(br);
+                        link.appendChild(img);
 					}
 				}
 			}
