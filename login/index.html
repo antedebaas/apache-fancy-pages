@@ -100,29 +100,64 @@
       text-align: left;
     }
 
-    input {
-        margin-bottom: 15px;
-    }
-
-    input[type=text], input[type=password]{
-        height: 32px;
-        padding-top: 6px;
-        padding-left: 12px;
-        width: 100%;
-        border: 1 px solid #ccc;
-    }
-    
-    input[type=submit] {
+    .form-input {
         display: block;
-        margin: 20px auto 0;
-        width: 150px;
-        height: 40px;
-        border-radius: 7px;
-        border: none;
-        color: #3d3c3c;
-        font-weight: 700;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
+    .form-input:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .form-input:hover {
+        border-color: #b3d7ff;
+    }
+
+    .btn-submit {
+        display: inline-block;
+        font-weight: 400;
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+        float: right;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .btn-submit:active {
+        background-color: #004085;
+        border-color: #003768;
+    }
+
+    .btn-submit:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
   </style>
 </head>
 
@@ -134,9 +169,9 @@
             <hr>
             <p>
                 <form method="POST" action="/">
-                    Username: <input type="text" name="username" value="" /><br>
-                    Password: <input type="password" name="password" value="" /><br>
-                    <input type="submit" name="login" value="Login" />
+                    <input type="text" class="form-input" name="username" placeholder="Username" autofocus="autofocus" value="" /><br>
+                    <input type="password" class="form-input" name="password" placeholder="Password" value="" /><br>
+                    <input type="submit" class="btn-submit" name="login" value="Login" />
                 </form>
             </p>
         </div>
