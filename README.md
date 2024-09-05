@@ -21,6 +21,7 @@
 - Search/Filter results
 - Light/Dark theme based on user prefered color scheme  
 - Replacement for default error pages: 401, 403, 404, 500
+- Replacement for http_auth popup using mod_session (see sample.apache-vhost.conf for configuration)
 
 ## Requirements
 - Apache >= 2.4 
